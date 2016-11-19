@@ -1,4 +1,4 @@
-package com.docs;
+package com.docs.utils;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -12,7 +12,9 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.*;
+import com.google.api.services.sheets.v4.model.ValueRange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,27 +22,39 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-public class Quickstart {
-    /** Application name. */
+public class SheetsUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SheetsUtils.class);
+    /**
+     * Application name.
+     */
     private static final String APPLICATION_NAME =
             "Google Sheets API Java Quickstart";
 
-    /** Directory to store user credentials for this application. */
+    /**
+     * Directory to store user credentials for this application.
+     */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
             System.getProperty("user.home"), ".credentials/sheets.googleapis.com-java-quickstart");
 
-    /** Global instance of the {@link FileDataStoreFactory}. */
+    /**
+     * Global instance of the {@link FileDataStoreFactory}.
+     */
     private static FileDataStoreFactory DATA_STORE_FACTORY;
 
-    /** Global instance of the JSON factory. */
+    /**
+     * Global instance of the JSON factory.
+     */
     private static final JsonFactory JSON_FACTORY =
             JacksonFactory.getDefaultInstance();
 
-    /** Global instance of the HTTP transport. */
+    /**
+     * Global instance of the HTTP transport.
+     */
     private static HttpTransport HTTP_TRANSPORT;
 
-    /** Global instance of the scopes required by this quickstart.
-     *
+    /**
+     * Global instance of the scopes required by this quickstart.
+     * <p/>
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/sheets.googleapis.com-java-quickstart
      */
@@ -59,13 +73,14 @@ public class Quickstart {
 
     /**
      * Creates an authorized Credential object.
+     *
      * @return an authorized Credential object.
      * @throws IOException
      */
-    public static Credential authorize() throws IOException {
+    private static Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                Quickstart.class.getResourceAsStream("/client_secret.json");
+                SheetsUtils.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -84,12 +99,15 @@ public class Quickstart {
     }
 
     /**
-     * Build and return an authorized Sheets API client service.
-     * @return an authorized Sheets API client service
+     * Build and return an authorized SheetsUtils API client service.
+     *
+     * @return an authorized SheetsUtils API client service
      * @throws IOException
      */
     public static Sheets getSheetsService() throws IOException {
+        LOGGER.debug("Intentando obtener autorización de Google Credentials");
         Credential credential = authorize();
+        LOGGER.debug("Se obtuvo autorización de Google Credentials");
         return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
