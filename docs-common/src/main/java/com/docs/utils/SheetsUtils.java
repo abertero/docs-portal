@@ -66,8 +66,8 @@ public class SheetsUtils {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
         } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
+            LOGGER.error("Error comunicandose con Google", t);
+            //System.exit(1);
         }
     }
 
@@ -93,8 +93,7 @@ public class SheetsUtils {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        System.out.println(
-                "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+        LOGGER.info(String.format("Credentials saved to %s", DATA_STORE_DIR.getAbsolutePath()));
         return credential;
     }
 

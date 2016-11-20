@@ -1,4 +1,4 @@
-package com.docs.utils;
+package com.docs.managers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +9,15 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
-/**
- * Created by aldo on 19-11-16.
- */
-public class PropertyUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtils.class);
+public class PropertiesManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesManager.class);
+    private Properties sheetsPropertyFile;
 
     private static Properties loadPropertyFile(String propertyFile) {
         Properties properties = new Properties();
         InputStream inputStream = null;
         try {
-            inputStream = PropertyUtils.class.getClassLoader().getResourceAsStream(propertyFile);
+            inputStream = PropertiesManager.class.getClassLoader().getResourceAsStream(propertyFile);
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
@@ -41,12 +39,16 @@ public class PropertyUtils {
         return properties;
     }
 
-    public static Properties getSheetsPropertyFile() {
-        return loadPropertyFile("sheets.properties");
+    public Properties getSheetsPropertyFile() {
+        if (sheetsPropertyFile == null) {
+            sheetsPropertyFile = loadPropertyFile("sheets.properties");
+        }
+        return sheetsPropertyFile;
     }
 
     public static void main(String[] args) {
-        Properties sheetsPropertyFile = getSheetsPropertyFile();
+        PropertiesManager propertiesManager = new PropertiesManager();
+        Properties sheetsPropertyFile = propertiesManager.getSheetsPropertyFile();
         Enumeration<?> e = sheetsPropertyFile.propertyNames();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();

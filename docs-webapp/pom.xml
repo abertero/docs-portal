@@ -47,6 +47,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>docs-portal</groupId>
+            <artifactId>docs-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <!-- Spring Framework -->
         <dependency>
             <groupId>org.springframework</groupId>

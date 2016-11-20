@@ -1,5 +1,9 @@
 package com.docs.web.config;
 
+import com.docs.managers.ProductManager;
+import com.docs.managers.PropertiesManager;
+import com.docs.utils.SheetsUtils;
+import com.google.api.services.sheets.v4.Sheets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -12,6 +16,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @Configuration
 @ComponentScan(basePackages = {"com.docs.web"})
@@ -51,5 +56,26 @@ public class ApplicationContext {
 
         LOGGER.info(String.format("Init viewResolver %s", viewResolver));
         return viewResolver;
+    }
+
+    @Bean
+    public Sheets sheets() throws IOException {
+        Sheets sheets = SheetsUtils.getSheetsService();
+        LOGGER.info(String.format("Init sheets %s", sheets));
+        return sheets;
+    }
+
+    @Bean
+    public PropertiesManager propertiesManager() {
+        PropertiesManager propertiesManager = new PropertiesManager();
+        LOGGER.info(String.format("Init propertiesManager %s", propertiesManager));
+        return propertiesManager;
+    }
+
+    @Bean
+    public ProductManager productManager(Sheets sheets, PropertiesManager propertiesManager) {
+        ProductManager productManager = new ProductManager(sheets, propertiesManager);
+        LOGGER.info(String.format("Init productManager %s", productManager));
+        return productManager;
     }
 }
