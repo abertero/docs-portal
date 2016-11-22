@@ -27,8 +27,8 @@ public class ProductManager {
         List<Product> products = new ArrayList<>();
         String spreadsheetId = sheetsPropertyFile.get("product.sheet").toString();
         // rango inicial es 2
-        int initialRange = pageIndex + 2;
-        int endRange = initialRange + pageSize;
+        int initialRange = pageIndex * pageSize + 2;
+        int endRange = initialRange + pageSize - 1;
         String range = String.format("%s!A%d:H%d", Product.SHEET_ID, initialRange, endRange);
         ValueRange response = null;
         try {
@@ -54,6 +54,7 @@ public class ProductManager {
         PropertiesManager propertiesManager = new PropertiesManager();
         ProductManager productManager = new ProductManager(sheets, propertiesManager);
         List<Product> products = productManager.getProducts(0, 10);
+        System.out.println(String.format("resultSize: %d", products.size()));
         for (Product product : products) {
             System.out.println(product);
         }

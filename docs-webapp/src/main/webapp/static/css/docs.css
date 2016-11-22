@@ -13,3 +13,8 @@ span.span-bold {
 td.td-center {
     text-align: center;
 }
+
+img.product-image {
+    width: 200px;
+    height: auto;
+}

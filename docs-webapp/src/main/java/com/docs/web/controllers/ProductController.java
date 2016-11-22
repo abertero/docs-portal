@@ -15,14 +15,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-@RequestMapping("/product/*")
 public class ProductController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/products", method = RequestMethod.GET)
     public ModelAndView products(@RequestParam(required = false, defaultValue = "0") Integer pageIndex) {
         LOGGER.info("Se llama vista de productos con pageIndex: %d", pageIndex);
         ModelAndView mv = new ModelAndView("products");
@@ -30,6 +29,7 @@ public class ProductController {
         LOGGER.debug(String.format("Productos obtenidos desde sheet: %s", products));
         mv.addObject("products", products);
         mv.addObject("pageIndex", pageIndex);
+        mv.addObject("hasNext", products.size() == WebappUtils.DEFAULT_PAGE_SIZE);
         return mv;
     }
 }
